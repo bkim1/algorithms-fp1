@@ -22,6 +22,10 @@ def construct_nx_graph(g):
     return dg
 
 def random_graphs():
+    '''
+    * Constructs set directed graph with random weights
+    :return: dict representing graph and a NetworkX version
+    '''
     g = {0: [(1, rand_weight())],
          1: [(2, rand_weight()), (3, rand_weight())],
          2: [(3, rand_weight())],
@@ -34,6 +38,9 @@ def random_graphs():
     return (g, construct_nx_graph(g))
 
 def rand_weight(start=1, end=20):
+    '''
+    * Returns random weight for graph
+    '''
     return random.randint(start, end)
 
 class TestAlg(unittest.TestCase):
@@ -102,6 +109,10 @@ class TestAlg(unittest.TestCase):
 
 
     def test_neg_cycle(self):
+        '''
+        * Tests that Bellman Ford algorithm correctly finds
+          the negative cycle
+        '''
         g = {0: [(1, 2)],
              1: [(2, 8), (3, 5)],
              2: [(3, -5)],
@@ -113,6 +124,10 @@ class TestAlg(unittest.TestCase):
         self.assertIsNone(BellmanFord.bellman_ford(g, 0))
 
     def test_neg_cycle_2(self):
+        '''
+        * Tests that Bellman Ford algorithm correctly finds
+          the negative cycle
+        '''
         g = {0: [(1, 2)],
              1: [(2, 8), (3, 5)],
              2: [(3, -5)],
