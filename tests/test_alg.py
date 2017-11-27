@@ -114,9 +114,13 @@ class TestAlg(unittest.TestCase):
         self.assertEqual(dj_dist, nx_dist)
 
     def test_dist_to_target_100(self):
+        '''
+        * Generates 100 random directed graphs and tests correctness
+        * Tests shortest distance to target node
+        '''
         check = True
 
-        for _ in range(33):
+        for _ in range(34):
             g, nx_g = rand_graphs()
             nx_dist = nx.bellman_ford_path_length(nx_g, 0, 6)
             bf_dist = BF.bellman_ford(g, 0, target=6)
@@ -125,6 +129,8 @@ class TestAlg(unittest.TestCase):
             if nx_dist != bf_dist or nx_dist != dj_dist:
                 check = False
                 break
+
+        self.assertTrue(check)
 
         for _ in range(33):
             g, nx_g = rand_graphs_2()
@@ -135,12 +141,14 @@ class TestAlg(unittest.TestCase):
             if nx_dist != bf_dist  or nx_dist != dj_dist:
                 check = False
                 break
+        
+        self.assertTrue(check)
 
         for _ in range(33):
             g, nx_g = rand_graphs_3()
-            nx_dist = nx.bellman_ford_path_length(nx_g, 0, 11)
-            bf_dist = BF.bellman_ford(g, 0, target=11)
-            dj_dist = Dijkstra.dij(g, 0, t=11)
+            nx_dist = nx.bellman_ford_path_length(nx_g, 0, 15)
+            bf_dist = BF.bellman_ford(g, 0, target=15)
+            dj_dist = Dijkstra.dij(g, 0, t=15)
 
             if nx_dist != bf_dist  or nx_dist != dj_dist:
                 check = False
@@ -160,13 +168,59 @@ class TestAlg(unittest.TestCase):
         bf_dists = BF.bellman_ford(g, 0)
         dj_dists = Dijkstra.dij(g, 0)
 
-        # print(dj_dists)
-
         check = True
-
         for node in g:
             if nx_dists[node] != bf_dists[node] or nx_dists[node] != dj_dists[node]:
                 check = False
+
+        self.assertTrue(check)
+
+    def test_dist_to_all_100(self):
+        '''
+        * Generates 100 random directed graphs and tests correctness
+        * Tests shortest distance to all nodes
+        '''
+        check = True
+
+        for _ in range(34):
+            g, nx_g = rand_graphs()
+            nx_dists = nx.single_source_bellman_ford_path_length(nx_g, 0)
+            bf_dists = BF.bellman_ford(g, 0)
+            dj_dists = Dijkstra.dij(g, 0)
+
+            check = True
+            for node in g:
+                if nx_dists[node] != bf_dists[node] or nx_dists[node] != dj_dists[node]:
+                    check = False
+                    break
+        
+        self.assertTrue(check)
+
+        for _ in range(33):
+            g, nx_g = rand_graphs_2()
+            nx_dists = nx.single_source_bellman_ford_path_length(nx_g, 0)
+            bf_dists = BF.bellman_ford(g, 0)
+            dj_dists = Dijkstra.dij(g, 0)
+
+            check = True
+            for node in g:
+                if nx_dists[node] != bf_dists[node] or nx_dists[node] != dj_dists[node]:
+                    check = False
+                    break
+        
+        self.assertTrue(check)
+
+        for _ in range(33):
+            g, nx_g = rand_graphs_3()
+            nx_dists = nx.single_source_bellman_ford_path_length(nx_g, 0)
+            bf_dists = BF.bellman_ford(g, 0)
+            dj_dists = Dijkstra.dij(g, 0)
+
+            check = True
+            for node in g:
+                if nx_dists[node] != bf_dists[node] or nx_dists[node] != dj_dists[node]:
+                    check = False
+                    break
 
         self.assertTrue(check)
     
@@ -181,10 +235,52 @@ class TestAlg(unittest.TestCase):
         bf_path = BF.bf_paths(g, 0, target=6)
         nx_path = nx.bellman_ford_path(nx_g, 0, 6)
         dj_path = Dijkstra.dij_paths(g, 0, t=6)
-        dj_nx_path = nx.dijkstra_path(nx_g, 0, 6)
 
         self.assertListEqual(bf_path, nx_path)
-        self.assertListEqual(dj_path, dj_nx_path)
+        self.assertListEqual(dj_path, nx_path)
+
+    def test_path_to_target_100(self):
+        '''
+        * Generates 100 random directed graphs and tests correctness
+        * Tests shortest path to target node
+        '''
+        check = True
+
+        for _ in range(34):
+            g, nx_g = rand_graphs()
+            bf_path = BF.bf_paths(g, 0, target=6)
+            nx_path = nx.bellman_ford_path(nx_g, 0, 6)
+            dj_path = Dijkstra.dij_paths(g, 0, t=6)
+
+            if nx_path != bf_path or nx_path != dj_path:
+                check = False
+                break
+
+        self.assertTrue(check)
+
+        for _ in range(33):
+            g, nx_g = rand_graphs_2()
+            bf_path = BF.bf_paths(g, 0, target=11)
+            nx_path = nx.bellman_ford_path(nx_g, 0, 11)
+            dj_path = Dijkstra.dij_paths(g, 0, t=11)
+
+            if nx_path != bf_path or nx_path != dj_path:
+                check = False
+                break
+        
+        self.assertTrue(check)
+
+        for _ in range(33):
+            g, nx_g = rand_graphs_3()
+            bf_path = BF.bf_paths(g, 0, target=15)
+            nx_path = nx.bellman_ford_path(nx_g, 0, 15)
+            dj_path = Dijkstra.dij_paths(g, 0, t=15)
+
+            if nx_path != bf_path or nx_path != dj_path:
+                check = False
+                break
+
+        self.assertTrue(check)
 
     def test_path_to_all(self):
         '''
@@ -202,6 +298,55 @@ class TestAlg(unittest.TestCase):
         for node in g:
             if nx_paths[node] != bf_paths[node] or nx_paths[node] != dj_paths[node]:
                 check = False
+
+        self.assertTrue(check)
+
+    def test_path_to_all_100(self):
+        '''
+        * Generates 100 random directed graphs and tests correctness
+        * Tests shortest paths to all nodes
+        '''
+        check = True
+
+        for _ in range(34):
+            g, nx_g = rand_graphs()
+            nx_paths = nx.single_source_bellman_ford_path(nx_g, 0)
+            bf_paths = BF.bf_paths(g, 0)
+            dj_paths = Dijkstra.dij_paths(g, 0)
+
+            check = True
+            for node in g:
+                if nx_paths[node] != bf_paths[node] or nx_paths[node] != dj_paths[node]:
+                    check = False
+                    break
+
+        self.assertTrue(check)
+
+        for _ in range(33):
+            g, nx_g = rand_graphs_2()
+            nx_paths = nx.single_source_bellman_ford_path(nx_g, 0)
+            bf_paths = BF.bf_paths(g, 0)
+            dj_paths = Dijkstra.dij_paths(g, 0)
+
+            check = True
+            for node in g:
+                if nx_paths[node] != bf_paths[node] or nx_paths[node] != dj_paths[node]:
+                    check = False
+                    break
+        
+        self.assertTrue(check)
+
+        for _ in range(33):
+            g, nx_g = rand_graphs_3()
+            nx_paths = nx.single_source_bellman_ford_path(nx_g, 0)
+            bf_paths = BF.bf_paths(g, 0)
+            dj_paths = Dijkstra.dij_paths(g, 0)
+
+            check = True
+            for node in g:
+                if nx_paths[node] != bf_paths[node] or nx_paths[node] != dj_paths[node]:
+                    check = False
+                    break
 
         self.assertTrue(check)
 

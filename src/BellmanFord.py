@@ -57,7 +57,7 @@ def bellman_ford(graph, src, target=None):
         for u, w in graph[v]:
             # Check if 'n-th' hop creates a shorter dist
             if d[v] + w < d[u]:
-                # Negative Cycle --> Return None
+                # Negative Cycle found!
                 raise NegativeCycleError()
     
     if target is not None:
@@ -166,18 +166,24 @@ def construct_paths(graph, src):
 
 
 if __name__ == '__main__':
-    g = {0: [(1, 2)],
-             1: [(2, 8), (3, 5)],
-             2: [(3, -5)],
-             3: [(4, 4), (5, -2), (6, 1)],
-             4: [],
-             5: [(6, 6)],
-             6: []
-        }
+    g = {0: [(1, 3), (8, 20)],
+         1: [(2, 1)],
+         2: [(3, 7)],
+         3: [(4, 5), (6, 10)],
+         4: [(5, 2), (7, 6)],
+         5: [(7, 3)],
+         6: [(8, 1), (9, 6)],
+         7: [(11, 15)],
+         8: [(10, 4)],
+         9: [(10, 11), (11, 5)],
+         10: [(11, 8)],
+         11: []
+    }
 
     print(bellman_ford(g, 0))
     print(bf_paths(g, 0))
-    print(bellman_ford(g, 0, target=5))
+    print(bellman_ford(g, 0, target=11))
+    print(bf_paths(g, 0, target=11))
 
 
 
