@@ -107,6 +107,19 @@ class TestAlg(unittest.TestCase):
 
         self.assertTrue(check)
 
+    def test_graph_with_mult_trees(self):
+        g = {0: [(1, 2)],
+             1: [(2, 8), (3, 5)],
+             2: [(3, -5)],
+             3: [(5, -2), (6, 1)],
+             4: [],
+             5: [(6, 6)],
+             6: []
+        }
+        nx_g = construct_nx_graph(g)
+
+        with self.assertRaises(BellmanFord.NoPathError):
+            BellmanFord.bellman_ford(g, 0, target=4)
 
     def test_neg_cycle(self):
         '''
@@ -121,7 +134,8 @@ class TestAlg(unittest.TestCase):
              5: [(6, 6)],
              6: []
         }
-        self.assertIsNone(BellmanFord.bellman_ford(g, 0))
+        with self.assertRaises(BellmanFord.NegativeCycleError):
+            BellmanFord.bellman_ford(g, 0)
 
     def test_neg_cycle_2(self):
         '''
@@ -133,7 +147,8 @@ class TestAlg(unittest.TestCase):
              2: [(3, -5)],
              3: [(2, 2)]
         }
-        self.assertIsNone(BellmanFord.bellman_ford(g, 0))
+        with self.assertRaises(BellmanFord.NegativeCycleError):
+            BellmanFord.bellman_ford(g, 0)
 
 
 

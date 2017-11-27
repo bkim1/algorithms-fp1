@@ -3,11 +3,16 @@ dict to represent Graph:
     nodes == keys
     [(Edge to, Weight)] == Value
 
-    a --> b (weight of 5)
-    shown as 'a': [('b', 5)]
+    1 --> 2 (weight of 5)
+    shown as 1: [(2, 5)]
 '''
 import collections
 
+class NoPathError(Exception):
+    pass
+
+class NegativeCycleError(Exception):
+    pass
 
 def bellman_ford(graph, src, target=None):
     '''
@@ -48,9 +53,11 @@ def bellman_ford(graph, src, target=None):
             # Check if 'n-th' hop creates a shorter dist
             if d[v] + w < d[u]:
                 # Negative Cycle --> Return None
-                return
+                raise NegativeCycleError()
     
     if target is not None:
+        if d[target] == float('Inf'):
+            raise NoPathError()
         return d[target]
     
     return {node: d[node] for node in graph}
@@ -95,6 +102,8 @@ def bf_paths(graph, src, target=None):
         shortest_paths[node] = list(path)
 
     if target is not None:
+        if not shortest_paths[target]:
+            raise NoPathError()
         return shortest_paths[target]
 
     return shortest_paths
@@ -126,8 +135,7 @@ def construct_paths(graph, src):
             dist_v = d[v][0]
             dist_u = d[u][0]
             if dist_v + w < dist_u:
-                # print('Negative Cycle')
-                return
+                raise NegativeCycleError()
     
     return d
 
