@@ -5,6 +5,7 @@ from sys import stdin, stdout
 def dij(adjacentList, s, t=None):
     infinity = float('inf')    
     PQ = []
+    X = {x:x for x in adjacentList}
     prev = {x:x for x in adjacentList}
     distances = { x:infinity for x in adjacentList}
     distances[s] = 0
@@ -32,7 +33,10 @@ def dij(adjacentList, s, t=None):
                 heapq.heappush(PQ, item)
 
     if t is not None:
-        return distances[t]
+        if distances[t] == infinity: #no path to t 
+            break
+        else:
+            return distances[t]
     else:
         return distances
     
@@ -40,6 +44,7 @@ def dij_paths(adjacentList, s, t=None):
     infinity = float('inf')    
     PQ = []
     paths = []
+    X = {x:x for x in adjacentList}
     prev = {x:x for x in adjacentList}
     distances = { x:infinity for x in adjacentList}
     distances[s] = 0
