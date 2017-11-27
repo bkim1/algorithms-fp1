@@ -5,7 +5,7 @@ from sys import stdin, stdout
 def dij(adjacentList, s, t=None):
     infinity = float('inf')    
     PQ = []
-    X = {x:x for x in adjacentList}
+    prev = {x:x for x in adjacentList}
     distances = { x:infinity for x in adjacentList}
     distances[s] = 0
     item = [s, distances[s]]
@@ -21,10 +21,11 @@ def dij(adjacentList, s, t=None):
         v = heapq.heappop(PQ) #extractmin
         vNode = v[0]
         vDist = v[1]
-        if vDist == distances[vNode]:
             for u in adjacentList[vNode]: #nested for loop
+                
                 uNode = u[0]
                 uvDist = u[1]
+                prev[uNode] = vnode #updating previous list
                 if distances[uNode] > distances[vNode] + uvDist: #decreasekeypart
                     distances[uNode] = distances[vNode] + uvDist #update the distance
                     item = [uNode, distances[uNode]]
@@ -32,13 +33,14 @@ def dij(adjacentList, s, t=None):
 
     if t is not None:
         return distances[t]
-    return distances
+    else:
+        return distances
     
 def dij_paths(adjacentList, s, t=None):
     infinity = float('inf')    
     PQ = []
     paths = []
-    X = {x:x for x in adjacentList}
+    prev = {x:x for x in adjacentList}
     distances = { x:infinity for x in adjacentList}
     distances[s] = 0
     item = [s, distances[s]]
@@ -54,27 +56,21 @@ def dij_paths(adjacentList, s, t=None):
         v = heapq.heappop(PQ) #extractmin
         vNode = v[0]
         vDist = v[1]
-        if vDist == distances[vNode]:
+        
             for u in adjacentList[vNode]: #nested for loop
                 uNode = u[0]
                 uvDist = u[1]
+                prev[uNode] = vnode #updating previous list
                 if distances[uNode] > distances[vNode] + uvDist: #decreasekeypart
                     distances[uNode] = distances[vNode] + uvDist #update the distance
                     item = [uNode, distances[uNode]]
                     heapq.heappush(PQ, item)
 
     if t is not None:
-        for n in distances:
-            if n == t:
-                paths.append(n)
-                break
-            else:
-               paths.append(n) 
+        return prev[:t]
             
     else:
-        for n in distances:
-            paths.append(n)
-    return paths
+        return prev
             
         
 def main():
