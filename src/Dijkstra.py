@@ -30,8 +30,10 @@ def dij(adjacentList, s, t):
                     item = [uNode, distances[uNode]]
                     heapq.heappush(PQ, item)
 
-    #stdout.write("The distance from 'a' to 'h' is: " + str(distances['h'])+ "\n\n")
-    return distances
+    if t != None:
+        return distances[t]
+    else:
+        return distances
         
 def main():
      
