@@ -183,10 +183,8 @@ class TestAlg(unittest.TestCase):
         dj_path = Dijkstra.dij_paths(g, 0, t=6)
         dj_nx_path = nx.dijkstra_path(nx_g, 0, 6)
 
-        # print(dj_path)
-
         self.assertListEqual(bf_path, nx_path)
-        # self.assertListEqual(dj_path, dj_nx_path)
+        self.assertListEqual(dj_path, dj_nx_path)
 
     def test_path_to_all(self):
         '''
@@ -198,18 +196,16 @@ class TestAlg(unittest.TestCase):
 
         nx_paths = nx.single_source_bellman_ford_path(nx_g, 0)
         bf_paths = BF.bf_paths(g, 0)
-        # dj_paths = Dijkstra.dij(g, 0, p=1)
+        dj_paths = Dijkstra.dij_paths(g, 0)
 
         check = True
         for node in g:
-            if nx_paths[node] != bf_paths[node]:
+            if nx_paths[node] != bf_paths[node] or nx_paths[node] != dj_paths[node]:
                 check = False
-            # if nx_paths[node] != bf_paths[node] or nx_paths[node] != dj_paths[node]:
-                
 
         self.assertTrue(check)
 
-    def test_graph_with_mult_trees(self):
+    def test_graph_with_no_path(self):
         g = {0: [(1, 2)],
              1: [(2, 8), (3, 5)],
              2: [(3, -5)],
@@ -222,6 +218,9 @@ class TestAlg(unittest.TestCase):
 
         with self.assertRaises(BF.NoPathError):
             BF.bellman_ford(g, 0, target=4)
+        
+        with self.assertRaises(Dijkstra.NoPathError):
+            Dijkstra.dij(g, 0, t=4)
 
     def test_neg_cycle(self):
         '''

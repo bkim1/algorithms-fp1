@@ -12,7 +12,7 @@ def dij(adjacentList, s, t=None):
     PQ = []
     X = {x:x for x in adjacentList}
     prev = {x:x for x in adjacentList}
-    distances = { x:infinity for x in adjacentList}
+    distances = {x:infinity for x in adjacentList}
     distances[s] = 0
     item = [s, distances[s]]
     heapq.heappush(PQ, item)#insert (s,0) into PQ
@@ -21,17 +21,15 @@ def dij(adjacentList, s, t=None):
         item = [n, infinity]
         heapq.heappush(PQ, item)#insert each node with distance infinity
 
-    
     #for i = 0 in len(X):
     while(PQ):#not like his code!!!!
         v = heapq.heappop(PQ) #extractmin
         vNode = v[0]
         vDist = v[1]
         for u in adjacentList[vNode]: #nested for loop
-            
             uNode = u[0]
             uvDist = u[1]
-            #prev[uNode] = vNode #updating previous list
+
             if distances[uNode] > distances[vNode] + uvDist: #decreasekeypart
                 distances[uNode] = distances[vNode] + uvDist #update the distance
                 item = [uNode, distances[uNode]]
@@ -43,8 +41,8 @@ def dij(adjacentList, s, t=None):
             raise NoPathError()
         else:
             return distances[t]
-    else:
-        return distances
+    
+    return distances
     
 def dij_paths(adjacentList, s, t=None):
     infinity = float('inf')    
@@ -71,14 +69,12 @@ def dij_paths(adjacentList, s, t=None):
         for u in adjacentList[vNode]: #nested for loop
             uNode = u[0]
             uvDist = u[1]
-            #prev[uNode] = vNode #updating previous list
-            print("adding" + prev[uNode] + "\n")
+
             if distances[uNode] > distances[vNode] + uvDist: #decreasekeypart
                 distances[uNode] = distances[vNode] + uvDist #update the distance
                 item = [uNode, distances[uNode]]
                 heapq.heappush(PQ, item)
                 prev[uNode] = vNode
-                #print("adding" + prev[uNode] + "\n")
 
     if t is not None:
         return shortest_path(s, t, prev)
@@ -87,7 +83,10 @@ def dij_paths(adjacentList, s, t=None):
     shortest_paths = {node: [] for node in adjacentList}
 
     for node in shortest_paths:
-        shortest_paths[node] = shortest_path(s, node, prev)
+        try:
+            shortest_paths[node] = shortest_path(s, node, prev)
+        except NoPathError:
+            pass
     
     return shortest_paths
 
@@ -98,22 +97,24 @@ def shortest_path(s, t, prev):
     path.append(t)
     prev_node = prev[t]
 
-    if prev_node is None:
+    if prev_node == t and t != 0:
         raise NoPathError()
 
     if prev_node == 0 and t != 0:
         path.appendleft(prev_node)
         return list(path)
     elif t != 0:
+        curr_node = t
         while prev_node != s:
-            if prev_node is None:
+            if prev_node == curr_node:
                 raise NoPathError()
-
             
             path.appendleft(prev_node)
+            curr_node = prev_node
             prev_node = prev[prev_node]
+            
         path.appendleft(s)
-        #print("path", list(path) )
+        
     return list(path)
         
 def main():

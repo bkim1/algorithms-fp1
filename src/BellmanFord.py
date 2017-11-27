@@ -1,10 +1,15 @@
 '''
-dict to represent Graph:
+* Implementation of the Bellman Ford shortest paths algorithm 
+* Two main methods:
+    1) bellman_ford() --> Returns shortest distances
+    2) bf_paths() --> Returns shortest paths
+
+* dict to represent Graph:
     nodes == keys
     [(Edge to, Weight)] == Value
 
     1 --> 2 (weight of 5)
-    shown as 1: [(2, 5)]
+    respresented as (1: [(2, 5)])
 '''
 import collections
 
@@ -89,7 +94,10 @@ def bf_paths(graph, src, target=None):
         return shortest_path(src, target, d)
 
     for node in shortest_paths:
-        shortest_paths[node] = shortest_path(src, node, d)
+        try:
+            shortest_paths[node] = shortest_path(src, node, d)
+        except NoPathError:
+            pass
 
     return shortest_paths
 
