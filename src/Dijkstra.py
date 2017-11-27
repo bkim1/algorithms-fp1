@@ -21,15 +21,15 @@ def dij(adjacentList, s, t=None):
         v = heapq.heappop(PQ) #extractmin
         vNode = v[0]
         vDist = v[1]
-            for u in adjacentList[vNode]: #nested for loop
-                
-                uNode = u[0]
-                uvDist = u[1]
-                prev[uNode] = vnode #updating previous list
-                if distances[uNode] > distances[vNode] + uvDist: #decreasekeypart
-                    distances[uNode] = distances[vNode] + uvDist #update the distance
-                    item = [uNode, distances[uNode]]
-                    heapq.heappush(PQ, item)
+        for u in adjacentList[vNode]: #nested for loop
+            
+            uNode = u[0]
+            uvDist = u[1]
+            prev[uNode] = vnode #updating previous list
+            if distances[uNode] > distances[vNode] + uvDist: #decreasekeypart
+                distances[uNode] = distances[vNode] + uvDist #update the distance
+                item = [uNode, distances[uNode]]
+                heapq.heappush(PQ, item)
 
     if t is not None:
         return distances[t]
@@ -57,14 +57,14 @@ def dij_paths(adjacentList, s, t=None):
         vNode = v[0]
         vDist = v[1]
         
-            for u in adjacentList[vNode]: #nested for loop
-                uNode = u[0]
-                uvDist = u[1]
-                prev[uNode] = vnode #updating previous list
-                if distances[uNode] > distances[vNode] + uvDist: #decreasekeypart
-                    distances[uNode] = distances[vNode] + uvDist #update the distance
-                    item = [uNode, distances[uNode]]
-                    heapq.heappush(PQ, item)
+        for u in adjacentList[vNode]: #nested for loop
+            uNode = u[0]
+            uvDist = u[1]
+            prev[uNode] = vnode #updating previous list
+            if distances[uNode] > distances[vNode] + uvDist: #decreasekeypart
+                distances[uNode] = distances[vNode] + uvDist #update the distance
+                item = [uNode, distances[uNode]]
+                heapq.heappush(PQ, item)
 
     if t is not None:
         return prev[:t]
