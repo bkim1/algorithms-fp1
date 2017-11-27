@@ -12,5 +12,9 @@ Algorithms Final Project implementing Dijkstra's and Bellman Ford's shortest pat
 * NetworkX
 
 ## How To Run Tests:
-1. Open terminal to root directory
+1. Open terminal to root directory of project
 2. Run `python3 -m tests.test_alg`
+
+## How To Run the Benchmarks:
+1. Open terminal to root directory of project
+2. Run `python3 -m tests.benchmarks`
