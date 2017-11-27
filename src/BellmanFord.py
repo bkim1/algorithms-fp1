@@ -18,7 +18,7 @@ def bellman_ford(graph, src, target=None):
     '''
     * Calculates shortest distances and previous nodes for each node
 
-    :param graph: dict containing node: (edge, weight) pairs
+    :param graph: dict containing (node: (edge, weight)) pairs
                   represents the directed graph
 
     :param src: int representing the source node to start with
@@ -85,36 +85,48 @@ def bf_paths(graph, src, target=None):
     # Construct shortest path route
     shortest_paths = {node: [] for node in graph}
 
-    # Collections.deque() used for O(1) insertion @ front of list
-    path = collections.deque()
+    if target is not None:
+        return shortest_path(src, target, d)
 
     for node in shortest_paths:
-        # Clear the existing paths deque & start again for new node
-        path.clear()
-        path.append(node)
-        prev = d[node][1]
-
-        if prev == 0 and node != 0:
-            path.appendleft(prev)
-        elif node != 0:
-            # Add previous node to shortest path
-            while prev != src:
-                path.appendleft(prev)
-                prev = d[prev][1]
-            
-            path.appendleft(src)
-
-        shortest_paths[node] = list(path)
-
-    if target is not None:
-        if not shortest_paths[target]:
-            raise NoPathError()
-        return shortest_paths[target]
+        shortest_paths[node] = shortest_path(src, node, d)
 
     return shortest_paths
 
+def shortest_path(src, target, path_list):
+    '''
+    * Helper method to construct the shortest path from source to target node
+    '''
+    # Collections.deque() used for O(1) insertion @ front of list
+    path = collections.deque()
+
+    path.append(target)
+    prev = path_list[target][1]
+
+    if prev is None:
+        raise NoPathError()
+
+    if prev == 0 and target != 0:
+        path.appendleft(prev)
+        return list(path)
+    elif target != 0:
+        # Loop through and append previous nodes to list
+        while prev != src:
+            if prev is None:
+                raise NoPathError()
+            # Append to front of list for order
+            path.appendleft(prev)
+            prev = path_list[prev][1]
+        path.appendleft(src)
+
+    return list(path)
+
 
 def construct_paths(graph, src):
+    '''
+    * Helper method that runs Bellman Ford with paths
+      using a previous node for each node
+    '''
     # List containing distances and previous node for shortest route
     d = [(float('Inf'), None) for v in graph]
     d[src] = (0, src)

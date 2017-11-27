@@ -1,6 +1,11 @@
 import heapq
-import math
-from sys import stdin, stdout
+import collections
+
+
+class NoPathError(Exception):
+    pass
+
+
 
 def dij(adjacentList, s, t=None):
     infinity = float('inf')    
@@ -26,7 +31,7 @@ def dij(adjacentList, s, t=None):
             
             uNode = u[0]
             uvDist = u[1]
-            prev[uNode] = vnode #updating previous list
+            prev[uNode] = vNode #updating previous list
             if distances[uNode] > distances[vNode] + uvDist: #decreasekeypart
                 distances[uNode] = distances[vNode] + uvDist #update the distance
                 item = [uNode, distances[uNode]]
@@ -34,7 +39,7 @@ def dij(adjacentList, s, t=None):
 
     if t is not None:
         if distances[t] == infinity: #no path to t 
-            break
+            raise NoPathError()
         else:
             return distances[t]
     else:
@@ -65,18 +70,46 @@ def dij_paths(adjacentList, s, t=None):
         for u in adjacentList[vNode]: #nested for loop
             uNode = u[0]
             uvDist = u[1]
-            prev[uNode] = vnode #updating previous list
+            prev[uNode] = vNode #updating previous list
             if distances[uNode] > distances[vNode] + uvDist: #decreasekeypart
                 distances[uNode] = distances[vNode] + uvDist #update the distance
                 item = [uNode, distances[uNode]]
                 heapq.heappush(PQ, item)
 
     if t is not None:
-        return prev[:t]
-            
-    else:
-        return prev
-            
+        return shortest_path(s, t, prev)
+    
+    # Construct shortest path route
+    shortest_paths = {node: [] for node in adjacentList}
+
+    for node in shortest_paths:
+        shortest_paths[node] = shortest_path(s, node, prev)
+    
+    return shortest_paths
+
+def shortest_path(s, t, prev):
+    # Collections.deque() used for O(1) insertion @ front of list
+    path = collections.deque()
+
+    path.append(t)
+    prev_node = prev[t]
+
+    if prev_node is None:
+        raise NoPathError()
+
+    if prev_node == 0 and t != 0:
+        path.appendleft(prev_node)
+        return list(path)
+    elif t != 0:
+        while prev_node != s:
+            if prev_node is None:
+                raise NoPathError()
+
+            path.appendleft(prev_node)
+            prev_node = prev[prev_node]
+        path.appendleft(s)
+
+    return list(path)
         
 def main():
      
