@@ -30,7 +30,8 @@ def dij(adjacentList, s, t):
                     item = [uNode, distances[uNode]]
                     heapq.heappush(PQ, item)
 
-    stdout.write("The distance from 'a' to 'h' is: " + str(distances['h'])+ "\n\n")
+    #stdout.write("The distance from 'a' to 'h' is: " + str(distances['h'])+ "\n\n")
+    stdout.write("The minimum distances  " + str(distances[])+ "\n\n")
         
 def main():
      
