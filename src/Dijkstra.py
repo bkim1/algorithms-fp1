@@ -2,7 +2,7 @@ import heapq
 import math
 from sys import stdin, stdout
 
-def dij(adjacentList, s, t):
+def dij(adjacentList, s, t=None):
     infinity = float('inf')    
     PQ = []
     X = {x:x for x in adjacentList}
@@ -34,6 +34,51 @@ def dij(adjacentList, s, t):
         return distances[t]
     else:
         return distances
+    
+ def dijPaths(adjacentList, s, t=None):
+    infinity = float('inf')    
+    PQ = []
+    paths = []
+    X = {x:x for x in adjacentList}
+    distances = { x:infinity for x in adjacentList}
+    distances[s] = 0
+    item = [s, distances[s]]
+    heapq.heappush(PQ, item)#insert (s,0) into PQ
+
+    for n in X: 
+        item = [n, infinity]
+        heapq.heappush(PQ, item)#insert each node with distance infinity
+
+    
+    #for i = 0 in len(X):
+    while(PQ):#not like his code!!!!
+        v = heapq.heappop(PQ) #extractmin
+        vNode = v[0]
+        vDist = v[1]
+        if vDist == distances[vNode]:
+            for u in adjacentList[vNode]: #nested for loop
+                uNode = u[0]
+                uvDist = u[1]
+                if distances[uNode] > distances[vNode] + uvDist: #decreasekeypart
+                    distances[uNode] = distances[vNode] + uvDist #update the distance
+                    item = [uNode, distances[uNode]]
+                    heapq.heappush(PQ, item)
+
+    if t != None:
+        for n in distances:
+            if n == t:
+                paths.append(n)
+                break
+            else:
+               paths.append(n) 
+            
+        
+       # return distances.keys
+    else:
+        for n in distances:
+            paths.append(n)
+    return paths
+            
         
 def main():
      
