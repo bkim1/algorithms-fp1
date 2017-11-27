@@ -85,8 +85,12 @@ def bf_paths(graph, src, target=None):
     # Construct shortest path route
     shortest_paths = {node: [] for node in graph}
 
+    # Collections.deque() used for O(1) insertion @ front of list
+    path = collections.deque()
+
     for node in shortest_paths:
-        path = collections.deque()
+        # Clear the existing paths deque & start again for new node
+        path.clear()
         path.append(node)
         prev = d[node][1]
 
@@ -97,6 +101,7 @@ def bf_paths(graph, src, target=None):
             while prev != src:
                 path.appendleft(prev)
                 prev = d[prev][1]
+            
             path.appendleft(src)
 
         shortest_paths[node] = list(path)

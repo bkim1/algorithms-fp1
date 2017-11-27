@@ -30,12 +30,11 @@ def dij(adjacentList, s, t=None):
                     item = [uNode, distances[uNode]]
                     heapq.heappush(PQ, item)
 
-    if t != None:
+    if t is not None:
         return distances[t]
-    else:
-        return distances
+    return distances
     
- def dijPaths(adjacentList, s, t=None):
+def dij_paths(adjacentList, s, t=None):
     infinity = float('inf')    
     PQ = []
     paths = []
@@ -64,7 +63,7 @@ def dij(adjacentList, s, t=None):
                     item = [uNode, distances[uNode]]
                     heapq.heappush(PQ, item)
 
-    if t != None:
+    if t is not None:
         for n in distances:
             if n == t:
                 paths.append(n)
@@ -72,8 +71,6 @@ def dij(adjacentList, s, t=None):
             else:
                paths.append(n) 
             
-        
-       # return distances.keys
     else:
         for n in distances:
             paths.append(n)
