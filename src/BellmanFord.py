@@ -55,7 +55,7 @@ def bellman_ford(graph, src, target=None):
     d = [float('Inf') for v in graph]
     try:
         d[src] = 0
-    except KeyError:
+    except IndexError:
         raise ValueError('src argument not a valid node')
 
     # Loop through the graph finding the shortest paths with 'k' hops
@@ -82,7 +82,7 @@ def bellman_ford(graph, src, target=None):
         try:
             if d[target] == float('Inf'):
                 raise NoPathError()
-        except KeyError:
+        except IndexError:
             raise ValueError('src argument not a valid source')
     
         return d[target]
@@ -197,7 +197,7 @@ def construct_paths(graph, src):
     d = [(float('Inf'), None) for v in graph]
     try:
         d[src] = (0, src)
-    except KeyError:
+    except IndexError:
         raise ValueError('src argument not a valid node')
 
     # Loop through the graph finding the 
