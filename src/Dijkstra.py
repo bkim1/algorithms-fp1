@@ -1,14 +1,42 @@
+# Implementation of Dijkstra's shortest paths algorithm 
+#
+# Main functions:
+#     1) dij() --> Returns shortest distances
+#     2) dij_paths() --> Returns shortest paths
+#
+# Graph representation:
+#     Use dict datastructure to represent Graph:
+#         nodes == keys
+#         [(Edge to, Weight)] == Value
+#     Example:
+#         1 --> 2 (weight of 5)
+#         represented as (1: [(2, 5)])
 import heapq
 import collections
 
 
 class NoPathError(Exception):
+    '''Exception for when there is no path from source to node'''
     pass
+
 #add node s with distance 0 and all other nodes with distance infinity
 #while loop: add node v with the smallest distance of the nodes that are "one step" away
 #now consider all nodes "one step" from v and see if there are smaller distance, if yes then update with decrease key and add that to the priority queue
+#returns the shortest distance from a single source to the specified node t if there is one, or all the shortest paths
+def dij(adjacentList, s, t=None):
+    '''Calculates shortest distances for each node from a source
 
-def dij(adjacentList, s, t=None):#returns the shortest distance from a single source to the specified node t if there is one, or all the shortest paths
+    Arguments:
+        adjacentList -- dict containing (node: (edge, weight)) pairs
+                        represents the directed graph
+        s -- int representing the source node to start with
+        t -- int representing the target node to find shortest dist to
+    Returns:
+        dict with shortest distances for all nodes or shortest distance
+        to target if target param is given
+    Raises:
+        NoPathError -- if there is no path to target node   
+    '''
     infinity = float('inf')    
     PQ = []
     X = {x:x for x in adjacentList}
@@ -45,8 +73,23 @@ def dij(adjacentList, s, t=None):#returns the shortest distance from a single so
             return distances[t]#return the shortest distance to the destination node
     
     return distances #if no specific destination node is given return the shortest distances to all nodes from the source node
-    
-def dij_paths(adjacentList, s, t=None): #gives the shortest path, very similar to above code
+
+#gives the shortest path, very similar to above code  
+def dij_paths(adjacentList, s, t=None): 
+    '''Constructs shortest paths for every node in graph based on 
+    shortest distances unless a target node is specified
+
+    Arguments:
+        adjacentList -- dict containing (node: (edge, weight)) pair 
+                        representing the directed graph
+        s -- int representing the source node to start with
+        t -- int representing the target node to find shortest path to
+    Return:
+        dict with the shortest paths for each node in graph if target 
+        is None, else list with shortest path from src to target node
+    Raises:
+        NoPathError -- if there is no path to target node  
+    '''
     infinity = float('inf')    
     PQ = []
     paths = []
@@ -93,6 +136,18 @@ def dij_paths(adjacentList, s, t=None): #gives the shortest path, very similar t
     return shortest_paths
 
 def shortest_path(s, t, prev):
+    '''Construct the shortest path from source to target node with
+    given list of previous nodes
+
+    Arguments:
+        s -- int representing the source node
+        t -- int representing the target node
+        prev -- dict with (node: previous node) pairs for each node
+    Return:
+        list containing the path from source to target node
+    Raises:
+        NoPathError -- if there is no path to target node  
+    '''
     # Collections.deque() used for O(1) insertion @ front of list
     path = collections.deque()
 
