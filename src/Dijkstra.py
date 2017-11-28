@@ -1,17 +1,16 @@
-'''Implementation of Dijkstra's shortest paths algorithm 
-
-Main functions:
-    1) dij() --> Returns shortest distances
-    2) dij_paths() --> Returns shortest paths
-
-Graph representation:
-    dict to represent Graph:
-        nodes == keys
-        [(Edge to, Weight)] == Value
-    Example:
-        1 --> 2 (weight of 5)
-        represented as (1: [(2, 5)])
-'''
+# Implementation of Dijkstra's shortest paths algorithm 
+#
+# Main functions:
+#     1) dij() --> Returns shortest distances
+#     2) dij_paths() --> Returns shortest paths
+#
+# Graph representation:
+#     Use dict datastructure to represent Graph:
+#         nodes == keys
+#         [(Edge to, Weight)] == Value
+#     Example:
+#         1 --> 2 (weight of 5)
+#         represented as (1: [(2, 5)])
 import heapq
 import collections
 

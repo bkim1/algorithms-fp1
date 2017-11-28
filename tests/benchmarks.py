@@ -1,3 +1,18 @@
+# Benchmarks performance of our Bellman Ford and Dijkstra 
+# implementations versus NetworkX's implementations
+#
+# Benchmark prompts user for number of times to run tests
+#
+# Compares:
+#     - Our Bellman Ford vs. Our Dijkstra
+#     - Our Bellman Ford vs. NetworkX's Bellman Ford
+#     - Our Dijkstra vs. NetworkX's Dijkstra
+#
+# Outputs:
+#     - Average times for each
+#     - Minimum time for each
+#     - Maximum time for each
+#     - Percent difference for each comparison
 import time
 import random
 import networkx as nx

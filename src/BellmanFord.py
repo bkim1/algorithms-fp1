@@ -1,17 +1,17 @@
-'''Implementation of the Bellman Ford shortest paths algorithm 
+# Implementation of the Bellman Ford shortest paths algorithm 
+#
+# Main functions:
+#     1) bellman_ford() --> Returns shortest distances
+#     2) bf_paths() --> Returns shortest paths
+#
+# Graph representation:
+#     Use dict datastructure to represent Graph:
+#         nodes == keys
+#         [(Edge to, Weight)] == Value
+#     Example:
+#         1 --> 2 (weight of 5)
+#         represented as (1: [(2, 5)])
 
-Main functions:
-    1) bellman_ford() --> Returns shortest distances
-    2) bf_paths() --> Returns shortest paths
-
-Graph representation:
-    dict to represent Graph:
-        nodes == keys
-        [(Edge to, Weight)] == Value
-    Example:
-        1 --> 2 (weight of 5)
-        represented as (1: [(2, 5)])
-'''
 import collections
 
 class NoPathError(Exception):
