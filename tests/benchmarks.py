@@ -6,12 +6,13 @@ import src.Dijkstra as Dijkstra
 
 
 def construct_nx_graph(g):
-    '''
-    * Constructs the directed graph using the NetworkX library
-    * Adds all nodes, edges, and weights from input dict
+    '''Constructs the directed graph using the NetworkX library and 
+    adds all nodes, edges, and weights from input dict
 
-    :param g: input dictionary representing graph
-    :return dg: Directed graph using networkx library
+    Argument:
+        g -- input dictionary representing graph
+    Returns:
+        NetworkX's directed graph with same nodes, edges, and weights
     '''
     dg = nx.DiGraph()
 
@@ -25,11 +26,11 @@ def construct_nx_graph(g):
     return dg
 
 def rand_graphs():
-    '''
-    * Constructs set directed graph with random weights
-    * Graph has 7 nodes with set edges but randomized weights
+    '''Constructs set directed graph with random weights with a graph 
+    that has 7 nodes with set edges but randomized weights
 
-    :return: dict representing graph and a NetworkX version
+    Returns:
+        dict representing graph and a NetworkX version
     '''
     g = {0: [(1, rand_weight())],
          1: [(2, rand_weight()), (3, rand_weight())],
@@ -43,11 +44,11 @@ def rand_graphs():
     return (g, construct_nx_graph(g))
 
 def rand_graphs_2():
-    '''
-    * Constructs set directed graph with random weights
-    * Graph has 12 nodes with set edges but randomized weights
+    '''Constructs set directed graph with random weights with a graph 
+    that has 12 nodes with set edges but randomized weights
 
-    :return: dict representing graph and a NetworkX version
+    Returns:
+        dict representing graph and a NetworkX version
     '''
     g = {0: [(1, rand_weight()), (8, rand_weight())],
          1: [(2, rand_weight())],
@@ -66,11 +67,11 @@ def rand_graphs_2():
     return (g, construct_nx_graph(g))
 
 def rand_graphs_3():
-    '''
-    * Constructs set directed graph with random weights
-    * Graph has 16 nodes with set edges but randomized weights
+    '''Constructs set directed graph with random weights with a graph 
+    that has 16 nodes with set edges but randomized weights
 
-    :return: dict representing graph and a NetworkX version
+    Returns:
+        dict representing graph and a NetworkX version
     '''
     g = {0: [(1, rand_weight())],
          1: [(2, rand_weight()), (6, rand_weight())],
@@ -93,13 +94,12 @@ def rand_graphs_3():
     return (g, construct_nx_graph(g))
 
 def rand_weight(start=1, end=20):
-    '''
-    * Returns random weight for graph
-    '''
+    '''Returns random weight for graph'''
     return random.randint(start, end)
 
 
 def test_dij(g, t):
+    '''Returns time to run Dijkstra from src to target'''
     t0 = time.time()
     dist = Dijkstra.dij(g, 0, t=t)
     t1 = time.time()
@@ -107,6 +107,7 @@ def test_dij(g, t):
     return t1 - t0
 
 def test_bf(g, t):
+    '''Returns time to run Bellman Ford from src to target'''
     t0 = time.time()
     dist = BF.bellman_ford(g, 0, target=t)
     t1 = time.time()
@@ -114,6 +115,7 @@ def test_bf(g, t):
     return t1 - t0
 
 def test_nx_dij(g, t):
+    '''Returns time to run NetworkX Dijkstra from src to target'''
     t0 = time.time()
     dist = nx.dijkstra_path_length(g, 0, t)
     t1 = time.time()
@@ -121,12 +123,16 @@ def test_nx_dij(g, t):
     return t1 - t0
 
 def test_nx_bf(g, t):
+    '''Returns time to run NetworkX Bellman Ford from src to target'''
     t0 = time.time()
     dist = nx.bellman_ford_path_length(g, 0, t)
     t1 = time.time()
 
     return t1 - t0
 
+'''  ---------  START OF BENCHMARKING ---------  '''
+
+# Get number of times to run each test
 while True:
     try:
         num_times = int(input('Number of times to run tests: '))
@@ -136,13 +142,14 @@ while True:
         print()
         exit(0)
     else:
-        break
+        if num_times > 0:
+            break
 
 print('----- Time to Find Shortest Distance From Source to Target -----\n')
 print('Tests are run %i times each\n' % num_times)
 
 
-print('----- Random Graph #1 -----')
+print('----- Directed Graph #1 -----')
 g, nx_g = rand_graphs()
 
 bf_times = [test_bf(g, 6) for _ in range(num_times)]
@@ -184,7 +191,7 @@ print('\nOur Dij vs. NetworkX Dij Percent Difference: %.2f%%' % dij_nx_diff)
 print('Winner: %s' % ('Our Dij' if dij_avg <= nx_dij_avg else 'NetworkX Dij'))
 
 
-print('\n----- Random Graph #2 -----')
+print('\n----- Directed Graph #2 -----')
 g, nx_g = rand_graphs_2()
 
 bf_times = [test_bf(g, 11) for _ in range(num_times)]
@@ -226,7 +233,7 @@ print('\nOur Dij vs. NetworkX Dij Percent Difference: %.2f%%' % dij_nx_diff)
 print('Winner: %s' % ('Our Dij' if dij_avg <= nx_dij_avg else 'NetworkX Dij'))
 
 
-print('\n----- Random Graph #3 -----')
+print('\n----- Directed Graph #3 -----')
 g, nx_g = rand_graphs_3()
 
 bf_times = [test_bf(g, 15) for _ in range(num_times)]

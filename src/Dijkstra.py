@@ -1,13 +1,41 @@
+'''Implementation of Dijkstra's shortest paths algorithm 
+
+Main functions:
+    1) dij() --> Returns shortest distances
+    2) dij_paths() --> Returns shortest paths
+
+Graph representation:
+    dict to represent Graph:
+        nodes == keys
+        [(Edge to, Weight)] == Value
+    Example:
+        1 --> 2 (weight of 5)
+        represented as (1: [(2, 5)])
+'''
 import heapq
 import collections
 
 
 class NoPathError(Exception):
+    '''Exception for when there is no path from source to node'''
     pass
 
 
-
 def dij(adjacentList, s, t=None):
+    '''Calculates shortest distances for each node from a source
+
+    Arguments:
+        adjacentList -- dict containing (node: (edge, weight)) pairs
+                        represents the directed graph
+        s -- int representing the source node to start with
+        t -- int representing the target node to find shortest dist to
+    Returns:
+        dict with shortest distances for all nodes or shortest distance
+        to target if target param is given
+    Raises:
+        NoPathError -- if there is no path to target node   
+    '''
+
     infinity = float('inf')    
     PQ = []
     X = {x:x for x in adjacentList}
@@ -45,6 +73,21 @@ def dij(adjacentList, s, t=None):
     return distances
     
 def dij_paths(adjacentList, s, t=None):
+    '''Constructs shortest paths for every node in graph based on 
+    shortest distances unless a target node is specified
+
+    Arguments:
+        adjacentList -- dict containing (node: (edge, weight)) pair 
+                        representing the directed graph
+        s -- int representing the source node to start with
+        t -- int representing the target node to find shortest path to
+    Return:
+        dict with the shortest paths for each node in graph if target 
+        is None, else list with shortest path from src to target node
+    Raises:
+        NoPathError -- if there is no path to target node  
+    '''
+
     infinity = float('inf')    
     PQ = []
     paths = []
@@ -91,6 +134,18 @@ def dij_paths(adjacentList, s, t=None):
     return shortest_paths
 
 def shortest_path(s, t, prev):
+    '''Construct the shortest path from source to target node with
+    given list of previous nodes
+
+    Arguments:
+        s -- int representing the source node
+        t -- int representing the target node
+        prev -- dict with (node: previous node) pairs for each node
+    Return:
+        list containing the path from source to target node
+    Raises:
+        NoPathError -- if there is no path to target node  
+    '''
     # Collections.deque() used for O(1) insertion @ front of list
     path = collections.deque()
 
@@ -99,7 +154,8 @@ def shortest_path(s, t, prev):
 
     if prev_node == t and t != 0:
         raise NoPathError()
-
+    
+    # Check if path is only the target and the source
     if prev_node == 0 and t != 0:
         path.appendleft(prev_node)
         return list(path)
@@ -116,9 +172,9 @@ def shortest_path(s, t, prev):
         path.appendleft(s)
         
     return list(path)
-        
-def main():
-     
+
+
+if __name__ == "__main__":
     adj = {'a': [('b', 9), ('c', 6), ('e', 13)],
          'b': [('a', 9), ('f', 10)],
          'c': [('a', 6), ('e', 8), ('f', 18), ('d', 30)],
@@ -130,6 +186,3 @@ def main():
 
  
     dij_paths(adj, 'a', 'h')
-
-if __name__ == "__main__":
-    main()

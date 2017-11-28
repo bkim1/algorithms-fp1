@@ -5,12 +5,13 @@ import src.BellmanFord as BF
 import src.Dijkstra as Dijkstra
 
 def construct_nx_graph(g):
-    '''
-    * Constructs the directed graph using the NetworkX library
-    * Adds all nodes, edges, and weights from input dict
+    '''Constructs the directed graph using the NetworkX library and 
+    adds all nodes, edges, and weights from input dict
 
-    :param g: input dictionary representing graph
-    :return dg: Directed graph using networkx library
+    Argument:
+        g -- input dictionary representing graph
+    Returns:
+        NetworkX's directed graph with same nodes, edges, and weights
     '''
     dg = nx.DiGraph()
 
@@ -24,11 +25,11 @@ def construct_nx_graph(g):
     return dg
 
 def rand_graphs():
-    '''
-    * Constructs set directed graph with random weights
-    * Graph has 7 nodes with set edges but randomized weights
+    '''Constructs set directed graph with random weights with a graph 
+    that has 7 nodes with set edges but randomized weights
 
-    :return: dict representing graph and a NetworkX version
+    Returns:
+        dict representing graph and a NetworkX version
     '''
     g = {0: [(1, rand_weight())],
          1: [(2, rand_weight()), (3, rand_weight())],
@@ -42,11 +43,11 @@ def rand_graphs():
     return (g, construct_nx_graph(g))
 
 def rand_graphs_2():
-    '''
-    * Constructs set directed graph with random weights
-    * Graph has 12 nodes with set edges but randomized weights
+    '''Constructs set directed graph with random weights with a graph 
+    that has 12 nodes with set edges but randomized weights
 
-    :return: dict representing graph and a NetworkX version
+    Returns:
+        dict representing graph and a NetworkX version
     '''
     g = {0: [(1, rand_weight()), (8, rand_weight())],
          1: [(2, rand_weight())],
@@ -65,11 +66,11 @@ def rand_graphs_2():
     return (g, construct_nx_graph(g))
 
 def rand_graphs_3():
-    '''
-    * Constructs set directed graph with random weights
-    * Graph has 16 nodes with set edges but randomized weights
+    '''Constructs set directed graph with random weights with a graph 
+    that has 16 nodes with set edges but randomized weights
 
-    :return: dict representing graph and a NetworkX version
+    Returns:
+        dict representing graph and a NetworkX version
     '''
     g = {0: [(1, rand_weight())],
          1: [(2, rand_weight()), (6, rand_weight())],
@@ -92,17 +93,13 @@ def rand_graphs_3():
     return (g, construct_nx_graph(g))
 
 def rand_weight(start=1, end=20):
-    '''
-    * Returns random weight for graph
-    '''
+    '''Returns random weight for graph'''
     return random.randint(start, end)
 
 class TestAlg(unittest.TestCase):
     def test_dist_to_target(self):
-        '''
-        * Generates set directed graph with random weights
-        * Checks correctness of algorithm to library's for 
-          shortest distance to target node
+        '''Generates directed graph with random weights and checks
+        correctness vs. NetworkX's algorithm
         '''
         g, nx_g = rand_graphs()
 
@@ -114,12 +111,12 @@ class TestAlg(unittest.TestCase):
         self.assertEqual(dj_dist, nx_dist)
 
     def test_dist_to_target_100(self):
-        '''
-        * Generates 100 random directed graphs and tests correctness
-        * Tests shortest distance to target node
+        '''Generates 100 random directed graphs and tests correctness
+        for the shortest distance from a source to a target node
         '''
         check = True
 
+        # Test graph setup #1
         for _ in range(34):
             g, nx_g = rand_graphs()
             nx_dist = nx.bellman_ford_path_length(nx_g, 0, 6)
@@ -131,7 +128,7 @@ class TestAlg(unittest.TestCase):
                 break
 
         self.assertTrue(check)
-
+        # Test graph setup #2
         for _ in range(33):
             g, nx_g = rand_graphs_2()
             nx_dist = nx.bellman_ford_path_length(nx_g, 0, 11)
@@ -144,6 +141,7 @@ class TestAlg(unittest.TestCase):
         
         self.assertTrue(check)
 
+        # Test graph setup #3
         for _ in range(33):
             g, nx_g = rand_graphs_3()
             nx_dist = nx.bellman_ford_path_length(nx_g, 0, 15)
@@ -157,10 +155,8 @@ class TestAlg(unittest.TestCase):
         self.assertTrue(check)
 
     def test_dist_to_all(self):
-        '''
-        * Generates set directed graph with random weights
-        * Checks correctness of algorithm to library's for 
-          shortest distance to all nodes
+        '''Generates directed graph with random weights and checks
+        correctness vs. NetworkX's algorithm
         '''
         g, nx_g = rand_graphs()
 
@@ -176,12 +172,12 @@ class TestAlg(unittest.TestCase):
         self.assertTrue(check)
 
     def test_dist_to_all_100(self):
-        '''
-        * Generates 100 random directed graphs and tests correctness
-        * Tests shortest distance to all nodes
+        '''Generates 100 random directed graphs and tests correctness
+        for the shortest distance from a source to all nodes
         '''
         check = True
 
+        # Test graph setup #1
         for _ in range(34):
             g, nx_g = rand_graphs()
             nx_dists = nx.single_source_bellman_ford_path_length(nx_g, 0)
@@ -196,6 +192,7 @@ class TestAlg(unittest.TestCase):
         
         self.assertTrue(check)
 
+        # Test graph setup #2
         for _ in range(33):
             g, nx_g = rand_graphs_2()
             nx_dists = nx.single_source_bellman_ford_path_length(nx_g, 0)
@@ -209,7 +206,8 @@ class TestAlg(unittest.TestCase):
                     break
         
         self.assertTrue(check)
-
+        
+        # Test graph setup #3
         for _ in range(33):
             g, nx_g = rand_graphs_3()
             nx_dists = nx.single_source_bellman_ford_path_length(nx_g, 0)
@@ -225,10 +223,8 @@ class TestAlg(unittest.TestCase):
         self.assertTrue(check)
     
     def test_path_to_target(self):
-        '''
-        * Generates set directed graph with random weights
-        * Checks correctness of algorithm to library's for 
-          shortest path to target node
+        '''Generates directed graph with random weights and checks
+        correctness vs. NetworkX's algorithm
         '''
         g, nx_g = rand_graphs()
 
@@ -240,12 +236,12 @@ class TestAlg(unittest.TestCase):
         self.assertListEqual(dj_path, nx_path)
 
     def test_path_to_target_100(self):
-        '''
-        * Generates 100 random directed graphs and tests correctness
-        * Tests shortest path to target node
+        '''Generates 100 random directed graphs and tests correctness
+        for the shortest path from a source to a target node
         '''
         check = True
 
+        # Test graph setup #1
         for _ in range(34):
             g, nx_g = rand_graphs()
             bf_path = BF.bf_paths(g, 0, target=6)
@@ -258,6 +254,7 @@ class TestAlg(unittest.TestCase):
 
         self.assertTrue(check)
 
+        # Test graph setup #2
         for _ in range(33):
             g, nx_g = rand_graphs_2()
             bf_path = BF.bf_paths(g, 0, target=11)
@@ -270,6 +267,7 @@ class TestAlg(unittest.TestCase):
         
         self.assertTrue(check)
 
+        # Test graph setup #3
         for _ in range(33):
             g, nx_g = rand_graphs_3()
             bf_path = BF.bf_paths(g, 0, target=15)
@@ -283,10 +281,8 @@ class TestAlg(unittest.TestCase):
         self.assertTrue(check)
 
     def test_path_to_all(self):
-        '''
-        * Generates set directed graph with random weights
-        * Checks correctness of algorithm to library's for 
-          shortest path to all nodes
+        '''Generates directed graph with random weights and checks
+        correctness vs. NetworkX's algorithm
         '''
         g, nx_g = rand_graphs()
 
@@ -302,12 +298,12 @@ class TestAlg(unittest.TestCase):
         self.assertTrue(check)
 
     def test_path_to_all_100(self):
-        '''
-        * Generates 100 random directed graphs and tests correctness
-        * Tests shortest paths to all nodes
+        '''Generates 100 random directed graphs and tests correctness
+        for the shortest path from a source to all nodes
         '''
         check = True
 
+        # Test graph setup #1
         for _ in range(34):
             g, nx_g = rand_graphs()
             nx_paths = nx.single_source_bellman_ford_path(nx_g, 0)
@@ -322,6 +318,7 @@ class TestAlg(unittest.TestCase):
 
         self.assertTrue(check)
 
+        # Test graph setup #2
         for _ in range(33):
             g, nx_g = rand_graphs_2()
             nx_paths = nx.single_source_bellman_ford_path(nx_g, 0)
@@ -336,6 +333,7 @@ class TestAlg(unittest.TestCase):
         
         self.assertTrue(check)
 
+        # Test graph setup #3
         for _ in range(33):
             g, nx_g = rand_graphs_3()
             nx_paths = nx.single_source_bellman_ford_path(nx_g, 0)
@@ -351,6 +349,7 @@ class TestAlg(unittest.TestCase):
         self.assertTrue(check)
 
     def test_graph_with_no_path(self):
+        '''Tests that NoPathError is correctly raised'''
         g = {0: [(1, 2)],
              1: [(2, 8), (3, 5)],
              2: [(3, -5)],
@@ -368,10 +367,7 @@ class TestAlg(unittest.TestCase):
             Dijkstra.dij(g, 0, t=4)
 
     def test_neg_cycle(self):
-        '''
-        * Tests that Bellman Ford algorithm correctly finds
-          the negative cycle
-        '''
+        '''Tests that NegativeCycleError is correctly raised'''
         g = {0: [(1, 2)],
              1: [(2, 8), (3, 5)],
              2: [(3, -5)],
@@ -384,10 +380,7 @@ class TestAlg(unittest.TestCase):
             BF.bellman_ford(g, 0)
 
     def test_neg_cycle_2(self):
-        '''
-        * Tests that Bellman Ford algorithm correctly finds
-          the negative cycle
-        '''
+        '''Tests that NegativeCycleError is correctly raised'''
         g = {0: [(1, 2)],
              1: [(2, 8), (3, 5)],
              2: [(3, -5)],

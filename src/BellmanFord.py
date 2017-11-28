@@ -1,44 +1,62 @@
-'''
-* Implementation of the Bellman Ford shortest paths algorithm 
-* Two main methods:
+'''Implementation of the Bellman Ford shortest paths algorithm 
+
+Main functions:
     1) bellman_ford() --> Returns shortest distances
     2) bf_paths() --> Returns shortest paths
 
-* dict to represent Graph:
-    nodes == keys
-    [(Edge to, Weight)] == Value
-
-    1 --> 2 (weight of 5)
-    respresented as (1: [(2, 5)])
+Graph representation:
+    dict to represent Graph:
+        nodes == keys
+        [(Edge to, Weight)] == Value
+    Example:
+        1 --> 2 (weight of 5)
+        represented as (1: [(2, 5)])
 '''
 import collections
 
 class NoPathError(Exception):
+    '''Exception for when there is no path from source to node'''
     pass
 
 class NegativeCycleError(Exception):
+    '''Exception for when there is a negative cycle in graph'''
     pass
 
 def bellman_ford(graph, src, target=None):
+    '''Calculates shortest distances for each node from a source
+    
+    Arguments:
+        graph -- dict containing (node: (edge, weight)) pairs
+                 represents the directed graph
+        src -- int representing the source node to start with
+        target -- Optional param giving target node to find shortest 
+                  distance from src
+    Return:
+        None if negative cycle detected or graph is None, 
+        Else dict with shortest distances for all nodes or shortest 
+        distance to target if target param is given  
+    Raises:
+        ValueError -- if src or target are not valid nodes
+        TypeError -- if src & target aren't ints or graph is not a dict
+        NoPathError -- if there is no path to target node  
+        NegativeCycleError -- if there is a negative cycle in the graph
     '''
-    * Calculates shortest distances and previous nodes for each node
-
-    :param graph: dict containing (node: (edge, weight)) pairs
-                  represents the directed graph
-
-    :param src: int representing the source node to start with
-
-    :param target: Optional param giving target node to find shortest
-                   distance to from src
-
-    :return: None if negative cycle detected, else array with shortest 
-             distances and paths is returned or shortest dist to target
-             if target param is given  
-    '''
+    if graph is None:
+        return None
+    if type(graph) != dict:
+        raise TypeError('Graph input must be a dictionary')
+    if not isinstance(src, int):
+        raise TypeError('Expected: int Got: %s' % (type(src)))
+    if target is not None and not isinstance(target, int):
+        raise TypeError('Expected: int Got: %s' % (type(target)))
+   
     # List containing distances and previous node for shortest route
     # Initializing distance array taken from pseudo-code
     d = [float('Inf') for v in graph]
-    d[src] = 0
+    try:
+        d[src] = 0
+    except KeyError:
+        raise ValueError('src argument not a valid node')
 
     # Loop through the graph finding the shortest paths with 'k' hops
     # For loops taken from pseudo-code
@@ -61,26 +79,42 @@ def bellman_ford(graph, src, target=None):
                 raise NegativeCycleError()
     
     if target is not None:
-        if d[target] == float('Inf'):
-            raise NoPathError()
+        try:
+            if d[target] == float('Inf'):
+                raise NoPathError()
+        except KeyError:
+            raise ValueError('src argument not a valid source')
+    
         return d[target]
     
     return {node: d[node] for node in graph}
 
 
 def bf_paths(graph, src, target=None):
-    '''
-    * Constructs shortest paths for every node in graph
+    '''Constructs shortest paths for every node in graph based on 
+    shortest distances unless a target node is specified
 
-    :param graph: dict containing (node: (edge, weight)) pairs
-                  representing the directed graph
-    
-    :param src: int representing the source node to start with
-    
-    :return dict: Contains the shortest paths for each node in graph
-                  if target is given, then returns shortest path from
-                  src to target node
+    Arguments:
+        graph -- dict containing (node: (edge, weight)) pair 
+                 representing the directed graph
+        src -- int representing the source node to start with
+    Return:
+        dict with the shortest paths for each node in graph if target 
+        is None, else list with shortest path from src to target node
+    Raises:
+        TypeError -- if src & target aren't ints or graph is not a dict
+        NoPathError -- if there is no path to target node  
+        NegativeCycleError -- if there is a negative cycle in the graph
     '''
+    if graph is None:
+        return None
+    if type(graph) != dict:
+        raise TypeError('Graph input must be a dictionary')
+    if not isinstance(src, int):
+        raise TypeError('Expected: int Got: %s' % (type(src)))
+    if target is not None and not isinstance(target, int):
+        raise TypeError('Expected: int Got: %s' % (type(target)))
+
     # Get the shortest distances and previous node for each node
     d = construct_paths(graph, src)
 
@@ -102,18 +136,31 @@ def bf_paths(graph, src, target=None):
     return shortest_paths
 
 def shortest_path(src, target, path_list):
-    '''
-    * Helper method to construct the shortest path from source to target node
+    '''Construct the shortest path from source to target node with
+    given list of previous nodes
+
+    Arguments:
+        src -- int representing the source node
+        target -- int representing the target node
+        path_list -- list with previous node for each node in graph
+    Return:
+        list containing the path from source to target node
+    Raises:
+        NoPathError -- if there is no path to target node  
     '''
     # Collections.deque() used for O(1) insertion @ front of list
     path = collections.deque()
 
     path.append(target)
-    prev = path_list[target][1]
+    try:
+        prev = path_list[target][1]
+    except IndexError:
+        raise ValueError('target argument not a valid node') 
 
     if prev is None:
         raise NoPathError()
 
+    # Check if path is only the target and the source
     if prev == 0 and target != 0:
         path.appendleft(prev)
         return list(path)
@@ -125,19 +172,33 @@ def shortest_path(src, target, path_list):
             # Append to front of list for order
             path.appendleft(prev)
             prev = path_list[prev][1]
-        path.appendleft(src)
+        try:
+            path.appendleft(src)
+        except IndexError:
+            raise ValueError('src argument not a valid node') 
 
     return list(path)
 
 
 def construct_paths(graph, src):
-    '''
-    * Helper method that runs Bellman Ford with paths
-      using a previous node for each node
+    '''Runs Bellman Ford keeping track of previous nodes for each node
+
+    Arguments:
+        graph -- dict containing (node: (edge, weight)) pair 
+                 representing the directed graph
+        src -- int representing the source node to start with
+    Return:
+        list containing the distances and previous node for each node
+    Raises:
+        ValueError -- if src is not a valid node
+        NegativeCycleError -- if there is a negative cycle in the graph
     '''
     # List containing distances and previous node for shortest route
     d = [(float('Inf'), None) for v in graph]
-    d[src] = (0, src)
+    try:
+        d[src] = (0, src)
+    except KeyError:
+        raise ValueError('src argument not a valid node')
 
     # Loop through the graph finding the 
     # shortest paths with 'k' hops
