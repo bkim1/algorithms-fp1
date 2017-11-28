@@ -348,6 +348,16 @@ class TestAlg(unittest.TestCase):
 
         self.assertTrue(check)
 
+    def test_empty_graph(self):
+        '''Tests that Error is raised with empty graph'''
+        with self.assertRaises(TypeError):
+            test = BF.bellman_ford({},None)
+        
+    def test_invalid_src(self):
+        #with self.assertRaises(ValueError):
+        pass
+            
+
     def test_graph_with_no_path(self):
         '''Tests that NoPathError is correctly raised'''
         g = {0: [(1, 2)],

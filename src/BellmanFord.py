@@ -11,7 +11,6 @@
 #     Example:
 #         1 --> 2 (weight of 5)
 #         represented as (1: [(2, 5)])
-
 import collections
 
 class NoPathError(Exception):
@@ -21,6 +20,7 @@ class NoPathError(Exception):
 class NegativeCycleError(Exception):
     '''Exception for when there is a negative cycle in graph'''
     pass
+
 
 def bellman_ford(graph, src, target=None):
     '''Calculates shortest distances for each node from a source
@@ -59,18 +59,18 @@ def bellman_ford(graph, src, target=None):
         raise ValueError('src argument not a valid node')
 
     # Loop through the graph finding the shortest paths with 'k' hops
-    # For loops taken from pseudo-code
+    # Code taken from pseudo-code
     for k in range(1, len(graph) - 1):
         # Check for each vertex within the graph
         for v in graph:
             # Grab each edge connected to 'v' & their weight
             for u, w in graph[v]:
-                # Update weight & previous node if there's a shorter path
+                # Update weight & prev node if there's a shorter path
                 if d[v] + w < d[u]:
                     d[u] = d[v] + w
 
     # Check for any negative cycles
-    # Both for loops taken from pseudo-code
+    # Code taken from pseudo-code
     for v in graph:
         for u, w in graph[v]:
             # Check if 'n-th' hop creates a shorter dist
@@ -83,7 +83,7 @@ def bellman_ford(graph, src, target=None):
             if d[target] == float('Inf'):
                 raise NoPathError()
         except IndexError:
-            raise ValueError('src argument not a valid source')
+            raise ValueError('target argument not a valid source')
     
         return d[target]
     
@@ -150,8 +150,8 @@ def shortest_path(src, target, path_list):
     '''
     # Collections.deque() used for O(1) insertion @ front of list
     path = collections.deque()
-
     path.append(target)
+
     try:
         prev = path_list[target][1]
     except IndexError:
@@ -194,27 +194,28 @@ def construct_paths(graph, src):
         NegativeCycleError -- if there is a negative cycle in the graph
     '''
     # List containing distances and previous node for shortest route
+    # Initializing distance array taken from pseudo-code
     d = [(float('Inf'), None) for v in graph]
     try:
         d[src] = (0, src)
     except IndexError:
         raise ValueError('src argument not a valid node')
 
-    # Loop through the graph finding the 
-    # shortest paths with 'k' hops
+    # Loop through the graph finding the shortest paths with 'k' hops
+    # Code taken from pseudo-code
     for k in range(1, len(graph) - 1):
         # Check for each vertex within the graph
         for v in graph:
             # Grab each edge connected to 'v' & their weight
             for u, w in graph[v]:
-                # Update weight & previous node
-                # if there's a shorter path
+                # Update weight & prev node if there's a shorter path
                 dist_v = d[v][0]
                 dist_u = d[u][0]
                 if dist_v + w < dist_u:
                     d[u] = (dist_v + w, v)
 
     # Check for any negative cycles
+    # Code taken from pseudo-code
     for v in graph:
         for u, w in graph[v]:
             # Check if 'n-th' hop creates a shorter dist
