@@ -248,6 +248,17 @@ print('\nOur Dij vs. NetworkX Dij Percent Difference: %.2f%%' % dij_nx_diff)
 print('Winner: %s' % ('Our Dij' if dij_avg <= nx_dij_avg else 'NetworkX Dij'))
 
 
+bf_win = 0
+for _ in range(num_times):
+    bf_time = test_bf(g, 11)
+    nx_bf_time = test_nx_bf(nx_g, 11)
+
+    if bf_time < nx_bf_time:
+        bf_win += 1
+
+print('\n\nOur BF won: %i times out of %i' % (bf_win, num_times))
+
+
 print('\n----- Directed Graph #3 -----')
 g, nx_g = rand_graphs_3()
 
@@ -288,3 +299,5 @@ print('Winner: %s' % ('Our BF' if bf_avg <= nx_bf_avg else 'NetworkX BF'))
 
 print('\nOur Dij vs. NetworkX Dij Percent Difference: %.2f%%' % dij_nx_diff)
 print('Winner: %s' % ('Our Dij' if dij_avg <= nx_dij_avg else 'NetworkX Dij'))
+
+

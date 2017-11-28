@@ -1,4 +1,4 @@
-# Implementation of the Bellman Ford shortest paths algorithm 
+# Implementation of the Bellman Ford shortest paths algorithm
 #
 # Main functions:
 #     1) bellman_ford() --> Returns shortest distances
@@ -24,33 +24,33 @@ class NegativeCycleError(Exception):
 
 def bellman_ford(graph, src, target=None):
     '''Calculates shortest distances for each node from a source
-    
+
     Arguments:
         graph -- dict containing (node: (edge, weight)) pairs
                  represents the directed graph
         src -- int representing the source node to start with
-        target -- Optional param giving target node to find shortest 
+        target -- Optional param giving target node to find shortest
                   distance from src
     Return:
-        None if negative cycle detected or graph is None, 
-        Else dict with shortest distances for all nodes or shortest 
-        distance to target if target param is given  
+        None if negative cycle detected or graph is None,
+        Else dict with shortest distances for all nodes or shortest
+        distance to target if target param is given
     Raises:
         ValueError -- if src or target are not valid nodes
         TypeError -- if src & target aren't ints or graph is not a dict
-        NoPathError -- if there is no path to target node  
+        NoPathError -- if there is no path to target node
         NegativeCycleError -- if there is a negative cycle in the graph
     '''
     if graph is None:
         return None
-    if type(graph) != dict:
+    if not isinstance(graph, dict):
         raise TypeError('Graph input must be a dictionary')
     if not isinstance(src, int):
         raise TypeError('Expected: int Got: %s' % (type(src)))
     if target is not None and not isinstance(target, int):
         raise TypeError('Expected: int Got: %s' % (type(target)))
-   
-    # List containing distances and previous node for shortest route
+
+    # List containing distances for shortest route
     # Initializing distance array taken from pseudo-code
     d = [float('Inf') for v in graph]
     try:
@@ -60,7 +60,7 @@ def bellman_ford(graph, src, target=None):
 
     # Loop through the graph finding the shortest paths with 'k' hops
     # Code taken from pseudo-code
-    for k in range(1, len(graph) - 1):
+    for k in range(1, len(graph)):
         # Check for each vertex within the graph
         for v in graph:
             # Grab each edge connected to 'v' & their weight
@@ -77,38 +77,38 @@ def bellman_ford(graph, src, target=None):
             if d[v] + w < d[u]:
                 # Negative Cycle found!
                 raise NegativeCycleError()
-    
+
     if target is not None:
         try:
             if d[target] == float('Inf'):
                 raise NoPathError()
         except IndexError:
             raise ValueError('target argument not a valid source')
-    
+
         return d[target]
-    
+
     return {node: d[node] for node in graph}
 
 
 def bf_paths(graph, src, target=None):
-    '''Constructs shortest paths for every node in graph based on 
+    '''Constructs shortest paths for every node in graph based on
     shortest distances unless a target node is specified
 
     Arguments:
-        graph -- dict containing (node: (edge, weight)) pair 
+        graph -- dict containing (node: (edge, weight)) pair
                  representing the directed graph
         src -- int representing the source node to start with
     Return:
-        dict with the shortest paths for each node in graph if target 
+        dict with the shortest paths for each node in graph if target
         is None, else list with shortest path from src to target node
     Raises:
         TypeError -- if src & target aren't ints or graph is not a dict
-        NoPathError -- if there is no path to target node  
+        NoPathError -- if there is no path to target node
         NegativeCycleError -- if there is a negative cycle in the graph
     '''
     if graph is None:
         return None
-    if type(graph) != dict:
+    if not isinstance(graph, dict):
         raise TypeError('Graph input must be a dictionary')
     if not isinstance(src, int):
         raise TypeError('Expected: int Got: %s' % (type(src)))
@@ -203,7 +203,7 @@ def construct_paths(graph, src):
 
     # Loop through the graph finding the shortest paths with 'k' hops
     # Code taken from pseudo-code
-    for k in range(1, len(graph) - 1):
+    for k in range(1, len(graph)):
         # Check for each vertex within the graph
         for v in graph:
             # Grab each edge connected to 'v' & their weight
