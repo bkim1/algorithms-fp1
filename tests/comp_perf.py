@@ -5,8 +5,11 @@ import networkx as nx
 import src.BellmanFord as BF
 import src.Dijkstra as Dijkstra
 
-def gen_rand_graph(n):
-    nx_g = nx.fast_gnp_random_graph(n, 0.1, directed=True)
+def gen_rand_graph(n, m=None):
+    if m is not None:
+        nx_g = nx.gnm_random_graph(n, m, directed=True)    
+    else:
+        nx_g = nx.gnm_random_graph(n, n, directed=True)
 
     g = {node: [] for node in nx_g}
 
@@ -20,40 +23,52 @@ def rand_weight(start=1, end=20):
     '''Returns random weight for graph'''
     return random.randint(start, end)
 
-def test_dij(g, t):
-    '''Returns time to run Dijkstra from src to target'''
+def test_dij(g, t=None):
+    '''Returns time to run Dijkstra from src to all nodes'''
     t0 = time.time()
     dist = Dijkstra.dij(g, 0)
     t1 = time.time()
 
     return t1 - t0
 
-def test_bf(g, t):
-    '''Returns time to run Bellman Ford from src to target'''
+def test_bf(g, t=None):
+    '''Returns time to run Bellman Ford from src to all nodes'''
     t0 = time.time()
     dist = BF.bellman_ford(g, 0)
     t1 = time.time()
 
     return t1 - t0
 
-def test_nx_dij(g, t):
-    '''Returns time to run NetworkX Dijkstra from src to target'''
+def test_nx_dij(g, t=None):
+    '''Returns time to run NetworkX Dijkstra from src to all nodes'''
     t0 = time.time()
     dist = nx.single_source_dijkstra_path_length(g, 0)
     t1 = time.time()
 
     return t1 - t0
 
-def test_nx_bf(g, t):
-    '''Returns time to run NetworkX Bellman Ford from src to target'''
+def test_nx_bf(g, t=None):
+    '''Returns time to run NetworkX Bellman Ford from src to all nodes'''
     t0 = time.time()
     dist = nx.single_source_bellman_ford_path_length(g, 0)
     t1 = time.time()
 
     return t1 - t0
 
-# g, nx_g = gen_rand_graph(50)
-# print(g)
+# g, nx_g = gen_rand_graph(1000, 47978)
+# # print(g)
+# # print(len(nx_g.nodes))
+# # print(len(nx_g.edges))
+# # print(nx_g.edges)
+
+# # nx_dist = nx.single_source_bellman_ford_path_length(nx_g, 0)
+# # bf_dist = BF.bellman_ford(g, 0)
+
+# # print(nx_dist)
+# # print(bf_dist)
+# print(test_bf(g))
+# print(test_nx_bf(nx_g))
+
 # exit(0)
 
 all_bf = []
@@ -94,7 +109,7 @@ all_nx_dij_str = ['%f' % val for val in all_nx_dij]
 
 print('Outputting to file!')
 
-with open('comp_output.csv', 'w', newline='') as f:
+with open('perf_output.csv', 'w', newline='') as f:
     writer = csv.writer(f)
 
     writer.writerow(all_bf_str)

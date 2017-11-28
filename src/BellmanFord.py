@@ -72,11 +72,12 @@ def bellman_ford(graph, src, target=None):
     # Check for any negative cycles
     # Code taken from pseudo-code
     for v in graph:
-        for u, w in graph[v]:
-            # Check if 'n-th' hop creates a shorter dist
-            if d[v] + w < d[u]:
-                # Negative Cycle found!
-                raise NegativeCycleError()
+        if d[v] != float('Inf'):
+            for u, w in graph[v]:
+                # Check if 'n-th' hop creates a shorter dist
+                if d[v] + w < d[u]:
+                    # Negative Cycle found!
+                    raise NegativeCycleError()
 
     if target is not None:
         try:
@@ -87,7 +88,7 @@ def bellman_ford(graph, src, target=None):
 
         return d[target]
 
-    return {node: d[node] for node in graph}
+    return {node: d[node] for node in graph if d[node] != float('Inf')}
 
 
 def bf_paths(graph, src, target=None):
