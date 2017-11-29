@@ -46,15 +46,15 @@ def dij(adjacentList, s, t=None):
     distances[s] = 0
     item = [s, distances[s]]#the distance from the source is 0
     #the priority queue has a format of the (node name, distance from source)
-    heapq.heappush(PQ, item)#push (s,0) into PQ
+    heapq.heappush(PQ, item)#like the pseudo-code: push (s,0) into PQ
 
     for n in nodes: 
         item = [n, infinity]
-        heapq.heappush(PQ, item)#insert each node with distance infinity
+        heapq.heappush(PQ, item)#like the pseudo-code: insert each node with distance infinity
 
   
     while(PQ):
-        v = heapq.heappop(PQ) #extractmin from the priority queue
+        v = heapq.heappop(PQ) #like the pseudo-code: extractmin from the priority queue
         vNode = v[0]
         vDist = v[1]
         for u in adjacentList[vNode]: #nested for loop
@@ -63,7 +63,7 @@ def dij(adjacentList, s, t=None):
 
             if uNode not in visited or uvDist < visited[uNode]:
                 visited[uNode] = uvDist
-                if distances[uNode] > distances[vNode] + uvDist: #decreasekey part
+                if distances[uNode] > distances[vNode] + uvDist: #like the pseudo-code: decreasekey part
                     distances[uNode] = distances[vNode] + uvDist #update the distance if necesary
                     item = [uNode, distances[uNode]]
                     heapq.heappush(PQ, item)#push the updated value onto the priority queue
