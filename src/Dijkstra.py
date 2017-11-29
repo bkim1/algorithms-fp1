@@ -1,4 +1,4 @@
-Implementation of Dijkstra's shortest paths algorithm 
+#Implementation of Dijkstra's shortest paths algorithm 
 #
 # Main functions:
 #     1) dij() --> Returns shortest distances
