@@ -98,8 +98,9 @@ def rand_weight(start=-20, end=20):
     weight = random.randint(start, end)
     return weight if weight != 0 else weight - 1
 
-
-for i in range(100):
+dij_fail = 0
+bf_fail = 0
+for i in range(10):
     # g, nx_g = gen_rand_graph(10, neg_weight=True)
     g, nx_g = rand_graphs_2()
     while True:
@@ -112,22 +113,19 @@ for i in range(100):
             break
 
     dij_dists = Dijkstra.dij(g, 0)
-    # nx_dij_dists = nx.single_source_dijkstra_path_length(nx_g, 0)
-
+    nx_bf_dists = nx.single_source_bellman_ford_path_length(nx_g, 0)
+    failed = False
     for node in bf_dists:
-        if bf_dists[node] != dij_dists[node]:
+        if bf_dists[node] != nx_bf_dists[node]:
+            bf_fail += 1
+        if not failed and bf_dists[node] != dij_dists[node]:
+            dij_fail += 1
+            failed = True
             print('---- Graph #%i Results ----' % i)
             print('Bellman Ford: %s\n' % bf_dists)
             print('Dijkstra:     %s\n' % dij_dists)
             # print('NX Dijkstra:  %s\n' % nx_dij_dists)
 
 
-g = {0: [(1, 5), (2, 1)],
-     1: [(3, -5)],
-     2: [(3, 1)],
-     3: [(4, 1)],
-     4: []
-}
-
-print(BF.bellman_ford(g, 0, target=4))
-print(Dijkstra.dij(g, 0, t=4))
+print(dij_fail)
+print(bf_fail)
