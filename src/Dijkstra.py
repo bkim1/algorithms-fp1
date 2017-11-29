@@ -1,4 +1,4 @@
-#Implementation of Dijkstra's shortest paths algorithm 
+# Implementation of Dijkstra's shortest paths algorithm 
 #
 # Main functions:
 #     1) dij() --> Returns shortest distances
@@ -94,15 +94,16 @@ def dij_paths(adjacentList, s, t=None):
     '''
     infinity = float('inf')    
     PQ = []
-    paths = []
-    X = {x:x for x in adjacentList}
-    prev = {x:x for x in adjacentList}
+    visited = {}
+    visited[s] = 0 #the source is visited
+    nodes = {x:x for x in adjacentList}
+    prev = {x:x for x in adjacentList} #list of previous nodes vistied, to keep the shortest path
     distances = { x:infinity for x in adjacentList}
     distances[s] = 0
     item = [s, distances[s]]
     heapq.heappush(PQ, item)
 
-    for n in X: 
+    for n in nodes: 
         item = [n, infinity]
         heapq.heappush(PQ, item) 
 
@@ -117,11 +118,13 @@ def dij_paths(adjacentList, s, t=None):
             uNode = u[0]
             uvDist = u[1]
 
-            if distances[uNode] > distances[vNode] + uvDist: 
-                distances[uNode] = distances[vNode] + uvDist 
-                item = [uNode, distances[uNode]]
-                heapq.heappush(PQ, item)
-                prev[uNode] = vNode #once you have pushed the node u onto the priority queue not that the previous node was v so you can return the path
+            if uNode not in visited or uvDist < visited[uNode]:
+                visited[uNode] = uvDist
+                if distances[uNode] > distances[vNode] + uvDist: 
+                    distances[uNode] = distances[vNode] + uvDist 
+                    item = [uNode, distances[uNode]]
+                    heapq.heappush(PQ, item)
+                    prev[uNode] = vNode #once you have pushed the node u onto the priority queue not that the previous node was v so you can return the path
 
     if t is not None:
         return shortest_path(s, t, prev)
