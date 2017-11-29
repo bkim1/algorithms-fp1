@@ -1,4 +1,4 @@
-# Implementation of Dijkstra's shortest paths algorithm 
+Implementation of Dijkstra's shortest paths algorithm 
 #
 # Main functions:
 #     1) dij() --> Returns shortest distances
@@ -25,7 +25,6 @@ class NoPathError(Exception):
 #returns the shortest distance from a single source to the specified node t if there is one, or all the shortest paths
 def dij(adjacentList, s, t=None):
     '''Calculates shortest distances for each node from a source
-
     Arguments:
         adjacentList -- dict containing (node: (edge, weight)) pairs
                         represents the directed graph
@@ -39,7 +38,9 @@ def dij(adjacentList, s, t=None):
     '''
     infinity = float('inf')    
     PQ = []
-    X = {x:x for x in adjacentList}
+    visited = {}
+    visited[s] = 0 #the source is visited
+    nodes = {x:x for x in adjacentList}
     prev = {x:x for x in adjacentList} #list of previous nodes vistied, to keep the shortest path
     distances = {x:infinity for x in adjacentList}
     distances[s] = 0
@@ -47,7 +48,7 @@ def dij(adjacentList, s, t=None):
     #the priority queue has a format of the (node name, distance from source)
     heapq.heappush(PQ, item)#push (s,0) into PQ
 
-    for n in X: 
+    for n in nodes: 
         item = [n, infinity]
         heapq.heappush(PQ, item)#insert each node with distance infinity
 
@@ -60,11 +61,13 @@ def dij(adjacentList, s, t=None):
             uNode = u[0]
             uvDist = u[1]
 
-            if distances[uNode] > distances[vNode] + uvDist: #decreasekey part
-                distances[uNode] = distances[vNode] + uvDist #update the distance if necesary
-                item = [uNode, distances[uNode]]
-                heapq.heappush(PQ, item)#push the updated value onto the priority queue
-                prev[uNode] = vNode #updating previous list
+            if uNode not in visited or uvDist < visited[uNode]:
+                visited[uNode] = uvDist
+                if distances[uNode] > distances[vNode] + uvDist: #decreasekey part
+                    distances[uNode] = distances[vNode] + uvDist #update the distance if necesary
+                    item = [uNode, distances[uNode]]
+                    heapq.heappush(PQ, item)#push the updated value onto the priority queue
+                    prev[uNode] = vNode #updating previous list
 
     if t is not None: #there is a destination node given 
         if distances[t] == infinity: #no path to t 
@@ -78,7 +81,6 @@ def dij(adjacentList, s, t=None):
 def dij_paths(adjacentList, s, t=None): 
     '''Constructs shortest paths for every node in graph based on 
     shortest distances unless a target node is specified
-
     Arguments:
         adjacentList -- dict containing (node: (edge, weight)) pair 
                         representing the directed graph
@@ -138,7 +140,6 @@ def dij_paths(adjacentList, s, t=None):
 def shortest_path(s, t, prev):
     '''Construct the shortest path from source to target node with
     given list of previous nodes
-
     Arguments:
         s -- int representing the source node
         t -- int representing the target node
